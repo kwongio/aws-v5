@@ -3,23 +3,30 @@ server:
   servlet:
     encoding:
       charset: utf-8
+      force: true
 
 spring:
   datasource:
-    url: jdbc:mariadb://${rds.hostname}:${rds.port}/${rds.db.name}?allowPublicKeyRetrieval=true&useSSL=false
-    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://${rds.hostname}:${rds.port}/${rds.db.name}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${rds.username}
     password: ${rds.password}
 
   jpa:
-    open-in-view: true
     hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-logging:
-  level:
-    '[org.springframework.boot.web]': INFO
+        default_batch_fetch_size: 50
+        use_sql_comments: true
+        format_sql: true
+        show_sql: true
+    open-in-view: false
+
+  data:
+    web:
+      pageable:
+        default-page-size: 100
+        max-page-size: 2000
+        one-indexed-parameters: on
+
